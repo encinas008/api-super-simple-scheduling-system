@@ -1,7 +1,7 @@
 package com.scheduling.system.Domain.parsers;
 
 import com.scheduling.system.Domain.dtos.ClassDto;
-import com.scheduling.system.Repository.models.Class;
+import com.scheduling.system.DAL.models.Class;
 import org.springframework.stereotype.Service;
 
 /**

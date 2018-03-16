@@ -1,4 +1,4 @@
-package com.scheduling.system.Repository.models;
+package com.scheduling.system.DAL.models;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,6 +11,8 @@ public class Class {
     public String code;
     public String title;
     public String description;
+    private Set<Student> students;
+
 
     @Id
     public String getCode() {
@@ -35,5 +37,14 @@ public class Class {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @ManyToMany(mappedBy = "classes")
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
 }

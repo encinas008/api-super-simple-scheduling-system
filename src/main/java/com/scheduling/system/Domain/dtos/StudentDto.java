@@ -7,15 +7,15 @@ package com.scheduling.system.Domain.dtos;
  * Created by Rafael Encinas.
  */
 public class StudentDto {
-    private String studentId;
+    private Integer studentId;
     private String name;
     private String last_name;
 
-    public String getStudentId() {
+    public Integer getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(String studentId) {
+    public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
 

@@ -1,7 +1,7 @@
 package com.scheduling.system.Domain.parsers;
 
 import com.scheduling.system.Domain.dtos.StudentDto;
-import com.scheduling.system.Repository.models.Student;
+import com.scheduling.system.DAL.models.Student;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,6 +12,7 @@ public class StudentParser implements IParser<Student, StudentDto> {
     @Override
     public StudentDto parserEntityToDto(Student entity) {
         StudentDto studentDto = new StudentDto();
+        studentDto.setStudentId(entity.getId());
         studentDto.setLast_name(entity.getLast_name());
         studentDto.setName(entity.getName());
 

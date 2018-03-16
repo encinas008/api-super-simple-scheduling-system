@@ -2,10 +2,12 @@ package com.scheduling.system.Domain.parsers;
 
 import com.scheduling.system.Domain.dtos.StudentDto;
 import com.scheduling.system.Repository.models.Student;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by jrafa Rafael Encinas.
  */
+@Service
 public class StudentParser implements IParser<Student, StudentDto> {
     @Override
     public StudentDto parserEntityToDto(Student entity) {

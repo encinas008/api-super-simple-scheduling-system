@@ -2,10 +2,12 @@ package com.scheduling.system.Domain.parsers;
 
 import com.scheduling.system.Domain.dtos.ClassDto;
 import com.scheduling.system.Repository.models.Class;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by Rafael Encinas.
  */
+@Service
 public class ClassParser implements IParser<Class, ClassDto>{
 
     @Override

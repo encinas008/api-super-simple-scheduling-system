@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class ClassController {
      * @throws Exception An problem in the creation process.
      */
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<?> createClass(@RequestBody ClassDto classDto) throws Exception {
+    public ResponseEntity<?> createClass(@Valid @RequestBody ClassDto classDto) throws Exception {
         ClassDto result = classService.createClass(classDto);
         if(result != null){
             return new ResponseEntity<>(result, HttpStatus.OK);

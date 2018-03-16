@@ -1,5 +1,8 @@
 package com.scheduling.system.Domain.dtos;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 /**
  *
  * This ClassDto class is for define attributes of input for a Class.
@@ -7,8 +10,14 @@ package com.scheduling.system.Domain.dtos;
  * Created by Rafael Encinas.
  */
 public class ClassDto {
+    @NotNull
+    @NotEmpty
     private String code;
+    @NotNull
+    @NotEmpty
     private String title;
+    @NotNull
+    @NotEmpty
     private String description;
 
     public String getCode() {

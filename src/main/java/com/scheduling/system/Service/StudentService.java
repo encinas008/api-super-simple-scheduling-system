@@ -94,7 +94,7 @@ public class StudentService {
     public StudentDto updateStudent(int studentId, StudentDto studentDto) throws Exception {
         Student student = studentRepository.findById(studentId).get();
         student.setName(studentDto.getName());
-        student.setLast_name(studentDto.getLast_name());
+        student.setLast_name(studentDto.getLastName());
         Student studentSaved = studentRepository.save(student);
 
         if(studentSaved != null) {

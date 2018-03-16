@@ -13,7 +13,7 @@ public class StudentParser implements IParser<Student, StudentDto> {
     public StudentDto parserEntityToDto(Student entity) {
         StudentDto studentDto = new StudentDto();
         studentDto.setStudentId(entity.getId());
-        studentDto.setLast_name(entity.getLast_name());
+        studentDto.setLastName(entity.getLast_name());
         studentDto.setName(entity.getName());
 
         return studentDto;
@@ -23,7 +23,7 @@ public class StudentParser implements IParser<Student, StudentDto> {
     public Student parserDtoToEntity(StudentDto dto) {
         Student student = new Student();
         student.setName(dto.getName());
-        student.setLast_name(dto.getLast_name());
+        student.setLast_name(dto.getLastName());
 
         return student;
     }

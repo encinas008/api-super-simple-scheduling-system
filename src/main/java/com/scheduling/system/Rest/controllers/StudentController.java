@@ -28,10 +28,9 @@ public class StudentController {
      *
      * @param studentDto An object that contain information about of student.
      * @return An studentDto
-     * @throws Exception An problem in the creation process.
      */
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<?> createStudent(@Valid @RequestBody StudentDto studentDto) throws Exception {
+    public ResponseEntity<?> createStudent(@Valid @RequestBody StudentDto studentDto) {
         StudentDto result = studentService.createStudent(studentDto);
         if(result != null){
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -43,10 +42,9 @@ public class StudentController {
      * Gets all students.
      *
      * @return An an list of studentsDto object anotherwise null.
-     * @throws Exception An problem to get all students process.
      */
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<?> getAllStudents() throws Exception {
+    public ResponseEntity<?> getAllStudents() {
         List<StudentDto> result = studentService.getAllStudents();
         if(result != null){
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -60,10 +58,9 @@ public class StudentController {
      * @param studentId An identifier of student.
      * @param code An identifier of class.
      * @return An an Student with your respective class anotherwise null.
-     * @throws Exception An problem to add an class for student process.
      */
     @RequestMapping(method = RequestMethod.POST, path="/{studentId}/classes/{code}", produces = "application/json")
-    public ResponseEntity<?> AddClassToStudent(@PathVariable int studentId,@PathVariable String code ) throws Exception {
+    public ResponseEntity<?> AddClassToStudent(@PathVariable int studentId,@PathVariable String code ) {
         StudentDto result = studentService.addStudentToClass(studentId, code);
         if(result != null){
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -76,10 +73,9 @@ public class StudentController {
      *
      * @param studentId An identifier of student.
      * @return An an list of ClassDtos object anotherwise null.
-     * @throws Exception An problem to get all class process.
      */
     @RequestMapping(method = RequestMethod.GET, path="/{studentId}/classes", produces = "application/json")
-    public ResponseEntity<?> getClassesByStudentId(@PathVariable int studentId) throws Exception {
+    public ResponseEntity<?> getClassesByStudentId(@PathVariable int studentId) {
         List<ClassDto> result = studentService.getClassesByStudentId(studentId);
         if(result != null){
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -92,10 +88,9 @@ public class StudentController {
      *
      * @param studentId An identifier of student.
      * @return
-     * @throws Exception An problem to get all class process.
      */
     @RequestMapping(method = RequestMethod.DELETE, path="/{studentId}", produces = "application/json")
-    public ResponseEntity<?> deleteStudentById(@PathVariable int studentId) throws Exception {
+    public ResponseEntity<?> deleteStudentById(@PathVariable int studentId) {
         boolean result = studentService.deleteStudent(studentId);
         if(result){
             return new ResponseEntity<>("", HttpStatus.OK);
@@ -109,10 +104,9 @@ public class StudentController {
      * @param studentId An identifier of student.
      * @param studentDto An object
      * @return
-     * @throws Exception An problem to get all class process.
      */
     @RequestMapping(method = RequestMethod.PUT, path="/{studentId}", produces = "application/json")
-    public ResponseEntity<?> deleteStudentById(@PathVariable int studentId, @RequestBody StudentDto studentDto) throws Exception {
+    public ResponseEntity<?> deleteStudentById(@PathVariable int studentId, @RequestBody StudentDto studentDto) {
         StudentDto result = studentService.updateStudent(studentId, studentDto);
         if(result != null){
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -125,7 +119,6 @@ public class StudentController {
      *
      * @param request An object
      * @return
-     * @throws Exception An problem to get all class process.
      */
     @RequestMapping(method = RequestMethod.GET, path = "/search",produces = "application/json")
     public ResponseEntity<?> search(HttpServletRequest request) throws Exception {

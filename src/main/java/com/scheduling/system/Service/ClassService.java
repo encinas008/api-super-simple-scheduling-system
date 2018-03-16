@@ -32,9 +32,8 @@ public class ClassService {
      *
      * @param classDto An object that contain information about a Class.
      * @return the classDto updated.
-     * @throws Exception
      */
-    public ClassDto createClass(ClassDto classDto)  throws Exception{
+    public ClassDto createClass(ClassDto classDto) {
         Class _class = parserClass.parserDtoToEntity(classDto);
         Class result = classRepository.save(_class);
 
@@ -49,9 +48,8 @@ public class ClassService {
      * Gets all Classes.
      *
      * @return the a list of classDto.
-     * @throws Exception
      */
-    public List<ClassDto> getAllClasses() throws Exception{
+    public List<ClassDto> getAllClasses() {
         List<ClassDto> classDtos = new ArrayList<>();
         Iterable<Class> classes = classRepository.findAll();
         for (Class _class: classes) {
@@ -67,9 +65,8 @@ public class ClassService {
      *
      * @param code An identifier of class.
      * @return a boolean if is removed TRUE another wise FALSE.
-     * @throws Exception
      */
-    public boolean deleteStudent(String code) throws Exception {
+    public boolean deleteStudent(String code)  {
         Class _class = classRepository.findById(code).get();
         if(_class == null) {
             return false;
@@ -84,9 +81,8 @@ public class ClassService {
      * @param code An identifier of class.
      * @param classDto An object that contain information about of a Class.
      * @return A ClassDto
-     * @throws Exception
      */
-    public ClassDto updateStudent(String code, ClassDto classDto) throws Exception {
+    public ClassDto updateStudent(String code, ClassDto classDto)  {
         Class _class = classRepository.findById(code).get();
         _class.setTitle(classDto.getTitle());
         _class.setDescription(classDto.getDescription());
@@ -103,9 +99,8 @@ public class ClassService {
      *
      * @param code An identifier of Class.
      * @return A list of Students.
-     * @throws Exception
      */
-    public List<StudentDto> getStudentsByClassId(String code) throws Exception {
+    public List<StudentDto> getStudentsByClassId(String code) {
         List<StudentDto> studentDtos = new ArrayList<>();
         Class _class = classRepository.findById(code).get();
         Iterable<Student> students =  _class.getStudents();
@@ -123,9 +118,8 @@ public class ClassService {
      * @param title An title of class.
      * @param description An breve description of class.
      * @return An list of class.
-     * @throws Exception
      */
-    public List<ClassDto> searchBy(String code, String title, String description) throws Exception {
+    public List<ClassDto> searchBy(String code, String title, String description) {
         List<ClassDto> classDtos = new ArrayList<>();
         List<Class> classes = classRepository.searchClasses(code, title, description);
         for (Class _class: classes) {

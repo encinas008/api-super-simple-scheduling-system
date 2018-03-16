@@ -36,9 +36,8 @@ public class StudentService {
      *
      * @param studentDto An object that contain information about a Student.
      * @return the studentDto updated.
-     * @throws Exception
      */
-    public StudentDto createStudent(StudentDto studentDto) throws Exception {
+    public StudentDto createStudent(StudentDto studentDto) {
         Student student = parserStudent.parserDtoToEntity(studentDto);
         Student result = studentRepository.save(student);
 
@@ -52,9 +51,8 @@ public class StudentService {
      * Gets all Students.
      *
      * @return the a list of studentDto.
-     * @throws Exception
      */
-    public List<StudentDto> getAllStudents() throws Exception {
+    public List<StudentDto> getAllStudents() {
         List<StudentDto> studentDtos = new ArrayList<>();
         Iterable<Student> students = studentRepository.findAll();
         if(students != null) {
@@ -72,9 +70,8 @@ public class StudentService {
      *
      * @param studentId An identifier of student.
      * @return a boolean if is removed TRUE another wise FALSE.
-     * @throws Exception
      */
-    public boolean deleteStudent(int studentId) throws Exception {
+    public boolean deleteStudent(int studentId) {
         Student student = studentRepository.findById(studentId).get();
         if(student == null) {
             return false;
@@ -89,9 +86,8 @@ public class StudentService {
      * @param studentId An identifier of student.
      * @param studentDto An object that contain information about a Student.
      * @return A StudentDto
-     * @throws Exception
      */
-    public StudentDto updateStudent(int studentId, StudentDto studentDto) throws Exception {
+    public StudentDto updateStudent(int studentId, StudentDto studentDto) {
         Student student = studentRepository.findById(studentId).get();
         student.setName(studentDto.getName());
         student.setLast_name(studentDto.getLastName());
@@ -109,9 +105,8 @@ public class StudentService {
      * @param studentId An identifier of student.
      * @param classCode An identifier of Class.
      * @return A StudentDto object.
-     * @throws Exception
      */
-    public StudentDto addStudentToClass(int studentId, String classCode) throws Exception {
+    public StudentDto addStudentToClass(int studentId, String classCode) {
         Class _class = classRepository.findById(classCode).get();
         Student student = studentRepository.findById(studentId).get();
         student.getClasses().add(_class);
@@ -125,9 +120,8 @@ public class StudentService {
      *
      * @param studentId An identifier of student.
      * @return A list of ClassDto.
-     * @throws Exception
      */
-    public List<ClassDto> getClassesByStudentId(int studentId) throws Exception {
+    public List<ClassDto> getClassesByStudentId(int studentId) {
         List<ClassDto> classDtos = new ArrayList<>();
         Student student = studentRepository.findById(studentId).get();
         Set<Class> classes = student.getClasses();
@@ -145,9 +139,8 @@ public class StudentService {
      * @param name An name of student
      * @param lastName An last name of student.
      * @return An list of students.
-     * @throws Exception
      */
-    public List<StudentDto> searchBy(String name, String lastName)  throws Exception {
+    public List<StudentDto> searchBy(String name, String lastName) {
         if(!name.isEmpty()) {
             List<StudentDto> studentDtos = new ArrayList<>();
             List<Student> students = studentRepository.searchStudents(name, lastName);

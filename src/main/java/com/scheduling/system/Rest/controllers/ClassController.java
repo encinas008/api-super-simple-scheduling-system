@@ -28,10 +28,9 @@ public class ClassController {
      *
      * @param classDto An object that contain information about of class.
      * @return An classDto
-     * @throws Exception An problem in the creation process.
      */
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<?> createClass(@Valid @RequestBody ClassDto classDto) throws Exception {
+    public ResponseEntity<?> createClass(@Valid @RequestBody ClassDto classDto) {
         ClassDto result = classService.createClass(classDto);
         if(result != null){
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -43,7 +42,6 @@ public class ClassController {
      * Gets all classes.
      *
      * @return An an list of classesDto object anotherwise null.
-     * @throws Exception An problem to get all classes process.
      */
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> getAllClasses() throws Exception {
@@ -59,10 +57,9 @@ public class ClassController {
      *
      * @param code An identifier of class.
      * @return An an list of objects studentDto another wise null.
-     * @throws Exception An problem to get all students process.
      */
     @RequestMapping(method = RequestMethod.GET, path = "/{code}/students", produces = "application/json")
-    public ResponseEntity<?> getAllStudentsByClassId(@PathVariable String code) throws Exception {
+    public ResponseEntity<?> getAllStudentsByClassId(@PathVariable String code) {
         List<StudentDto> result = classService.getStudentsByClassId(code);
         if(result != null){
             return new ResponseEntity<>(result, HttpStatus.OK);
@@ -75,10 +72,9 @@ public class ClassController {
      *
      * @param request An object
      * @return
-     * @throws Exception An problem to get all class process.
      */
     @RequestMapping(method = RequestMethod.GET, path = "/search",produces = "application/json")
-    public ResponseEntity<?> search(HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> search(HttpServletRequest request) {
         String queryString = request.getQueryString();
         Map<String, List<String>> listParemeters = Convert.StringToMap(queryString);
         List<ClassDto> classDtos = classService.searchBy(listParemeters.get("code").get(0), listParemeters.get("title").get(0), listParemeters.get("description").get(0));

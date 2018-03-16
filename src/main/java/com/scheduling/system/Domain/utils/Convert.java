@@ -19,9 +19,8 @@ public class Convert {
      *
      * @param queryString An string part of URL
      * @return Map<String, List<String>>
-     * @throws Exception An problem in the process of convert.
      */
-    public static Map<String, List<String>> StringToMap(String queryString) throws Exception {
+    public static Map<String, List<String>> StringToMap(String queryString) {
         return asList(queryString.split("&"))
                 .stream()
                 .map(s -> copyOf(s.split("="), 2))

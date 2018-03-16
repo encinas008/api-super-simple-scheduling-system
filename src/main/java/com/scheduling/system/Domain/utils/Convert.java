@@ -13,7 +13,15 @@ import static java.util.stream.Collectors.toList;
  * Created by Rafael Encinas.
  */
 public class Convert {
-    public static Map<String, List<String>> StringToMap(String queryString) {
+
+    /**
+     * Converts a query string from URL to MAP<key, value>
+     *
+     * @param queryString An string part of URL
+     * @return Map<String, List<String>>
+     * @throws Exception An problem in the process of convert.
+     */
+    public static Map<String, List<String>> StringToMap(String queryString) throws Exception {
         return asList(queryString.split("&"))
                 .stream()
                 .map(s -> copyOf(s.split("="), 2))

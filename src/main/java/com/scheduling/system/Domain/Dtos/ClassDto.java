@@ -1,4 +1,4 @@
-package com.scheduling.system.Domain.Dtos;
+package com.scheduling.system.Domain.dtos;
 
 /**
  *

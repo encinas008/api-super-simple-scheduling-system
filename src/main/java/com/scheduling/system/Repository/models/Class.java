@@ -8,21 +8,11 @@ import java.util.Set;
  */
 @Entity
 public class Class {
-    public Integer id;
     public String code;
     public String title;
     public String description;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getCode() {
         return code;
     }

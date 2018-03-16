@@ -7,11 +7,13 @@ import com.scheduling.system.Domain.dtos.StudentDto;
 import com.scheduling.system.Domain.parsers.IParser;
 import com.scheduling.system.DAL.models.Student;
 import com.scheduling.system.DAL.repositories.StudentRepository;
+import com.scheduling.system.Domain.utils.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -72,31 +74,33 @@ public class StudentService {
      * @return a boolean if is removed TRUE another wise FALSE.
      */
     public boolean deleteStudent(int studentId) {
-        Student student = studentRepository.findById(studentId).get();
-        if(student == null) {
+        if(studentRepository.findById(studentId).isPresent()) {
+            Student student = studentRepository.findById(studentId).get();
+            studentRepository.delete(student);
+            return true;
+        } else {
             return false;
         }
-        studentRepository.delete(student);
-        return true;
+
     }
 
     /**
      * Updates a student.
      *
      * @param studentId An identifier of student.
-     * @param studentDto An object that contain information about a Student.
+     * @param studentDto An object that contain information new for the Student.
      * @return A StudentDto
      */
     public StudentDto updateStudent(int studentId, StudentDto studentDto) {
-        Student student = studentRepository.findById(studentId).get();
-        student.setName(studentDto.getName());
-        student.setLast_name(studentDto.getLastName());
-        Student studentSaved = studentRepository.save(student);
-
-        if(studentSaved != null) {
+        if(studentRepository.findById(studentId).isPresent()) {
+            Student student = studentRepository.findById(studentId).get();
+            student.setName(studentDto.getName());
+            student.setLast_name(studentDto.getLastName());
+            Student studentSaved = studentRepository.save(student);
             return parserStudent.parserEntityToDto(studentSaved);
+        } else {
+            return null;
         }
-        return null;
     }
 
     /**
@@ -107,27 +111,33 @@ public class StudentService {
      * @return A StudentDto object.
      */
     public StudentDto addStudentToClass(int studentId, String classCode) {
-        Class _class = classRepository.findById(classCode).get();
-        Student student = studentRepository.findById(studentId).get();
-        student.getClasses().add(_class);
-        studentRepository.save(student);
-        StudentDto studentDto = parserStudent.parserEntityToDto(student);
-        return studentDto;
+        if(classRepository.findById(classCode).isPresent() && studentRepository.findById(studentId).isPresent()) {
+            Class _class = classRepository.findById(classCode).get();
+            Student student = studentRepository.findById(studentId).get();
+            student.getClasses().add(_class);
+            studentRepository.save(student);
+
+            return parserStudent.parserEntityToDto(student);
+        }
+
+        return null;
     }
 
     /**
-     * Gets all class assignment to student.
+     * Gets all class assignments to student.
      *
      * @param studentId An identifier of student.
      * @return A list of ClassDto.
      */
     public List<ClassDto> getClassesByStudentId(int studentId) {
         List<ClassDto> classDtos = new ArrayList<>();
-        Student student = studentRepository.findById(studentId).get();
-        Set<Class> classes = student.getClasses();
-        for (Class _class: classes) {
-            ClassDto classDto = parserClass.parserEntityToDto(_class);
-            classDtos.add(classDto);
+        if(studentRepository.findById(studentId).isPresent()) {
+            Student student = studentRepository.findById(studentId).get();
+            Set<Class> classes = student.getClasses();
+            for (Class _class: classes) {
+                ClassDto classDto = parserClass.parserEntityToDto(_class);
+                classDtos.add(classDto);
+            }
         }
 
         return classDtos;
@@ -136,20 +146,28 @@ public class StudentService {
     /**
      * Search Student by name or last name.
      *
-     * @param name An name of student
-     * @param lastName An last name of student.
+     * @param queryString An queryString of the request.
      * @return An list of students.
      */
-    public List<StudentDto> searchBy(String name, String lastName) {
-        if(!name.isEmpty()) {
-            List<StudentDto> studentDtos = new ArrayList<>();
+    public List<StudentDto> searchBy(String queryString) {
+        List<StudentDto> studentDtos = new ArrayList<>();
+        String name = null;
+        String lastName = null;
+
+        if(queryString != null) {
+            Map<String, List<String>> listParemeters = Convert.StringToMap(queryString);
+            name = listParemeters.get("name") != null ? listParemeters.get("name").get(0) : null;
+            lastName = listParemeters.get("last_name") != null ? listParemeters.get("last_name").get(0) : null;
+        }
+
+        if(name != null || lastName != null) {
             List<Student> students = studentRepository.searchStudents(name, lastName);
             for (Student student: students) {
                 StudentDto studentDto = parserStudent.parserEntityToDto(student);
                 studentDtos.add(studentDto);
             }
-            return studentDtos;
         }
-        return null;
+
+        return studentDtos;
     }
 }

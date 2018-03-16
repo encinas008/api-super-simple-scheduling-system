@@ -2,7 +2,6 @@ package com.scheduling.system.Rest.controllers;
 
 import com.scheduling.system.Domain.dtos.ClassDto;
 import com.scheduling.system.Domain.dtos.StudentDto;
-import com.scheduling.system.Domain.utils.Convert;
 import com.scheduling.system.Service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Rafael Encinas.
@@ -32,31 +30,60 @@ public class ClassController {
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<?> createClass(@Valid @RequestBody ClassDto classDto) {
         ClassDto result = classService.createClass(classDto);
-        if(result != null){
+        if(result != null) {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
     }
 
     /**
      * Gets all classes.
      *
-     * @return An an list of classesDto object anotherwise null.
+     * @return An object that contain list of classDto and a status.
      */
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<?> getAllClasses() throws Exception {
+    public ResponseEntity<?> getAllClasses() {
         List<ClassDto> result = classService.getAllClasses();
-        if(result != null){
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     /**
-     * Gets all students by identifier class.
+     * Deletes a class.
      *
      * @param code An identifier of class.
-     * @return An an list of objects studentDto another wise null.
+     * @return An object that contain TRUE if the class was deleted another wise FALSE and a status.
+     */
+    @RequestMapping(method = RequestMethod.DELETE, path="/{code}", produces = "application/json")
+    public ResponseEntity<?> deleteClassById(@PathVariable String code) {
+        boolean result = classService.deleteClass(code);
+        if(result){
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Updates a class.
+     *
+     * @param code An identifier of class.
+     * @param classDto An object that contain new info for update a class.
+     * @return An object that contain classDto or empty and a status.
+     */
+    @RequestMapping(method = RequestMethod.PUT, path="/{code}", produces = "application/json")
+    public ResponseEntity<?> updateClass(@PathVariable String code, @RequestBody ClassDto classDto) {
+        ClassDto result = classService.updateClass(code, classDto);
+        if(result != null) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+    }
+
+
+    /**
+     * Gets all students by identifier of class.
+     *
+     * @param code An identifier of class.
+     * @return An object that contain list of studentDto or empty and a status.
      */
     @RequestMapping(method = RequestMethod.GET, path = "/{code}/students", produces = "application/json")
     public ResponseEntity<?> getAllStudentsByClassId(@PathVariable String code) {
@@ -64,20 +91,19 @@ public class ClassController {
         if(result != null){
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
     }
 
     /**
      * Search a class by code or title or description.
      *
-     * @param request An object
-     * @return
+     * @param request An HttpServletRequest object.
+     * @return An object that contain classDto and a status.
      */
     @RequestMapping(method = RequestMethod.GET, path = "/search",produces = "application/json")
     public ResponseEntity<?> search(HttpServletRequest request) {
         String queryString = request.getQueryString();
-        Map<String, List<String>> listParemeters = Convert.StringToMap(queryString);
-        List<ClassDto> classDtos = classService.searchBy(listParemeters.get("code").get(0), listParemeters.get("title").get(0), listParemeters.get("description").get(0));
+        List<ClassDto> classDtos = classService.searchBy(queryString);
         return new ResponseEntity<>(classDtos, HttpStatus.OK);
     }
 }

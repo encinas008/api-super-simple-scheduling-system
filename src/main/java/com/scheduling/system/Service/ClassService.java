@@ -6,11 +6,13 @@ import com.scheduling.system.Domain.dtos.StudentDto;
 import com.scheduling.system.Domain.parsers.IParser;
 import com.scheduling.system.DAL.models.Class;
 import com.scheduling.system.DAL.repositories.ClassRepository;
+import com.scheduling.system.Domain.utils.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Rafael Encinas.
@@ -66,13 +68,14 @@ public class ClassService {
      * @param code An identifier of class.
      * @return a boolean if is removed TRUE another wise FALSE.
      */
-    public boolean deleteStudent(String code)  {
-        Class _class = classRepository.findById(code).get();
-        if(_class == null) {
+    public boolean deleteClass(String code)  {
+        if(classRepository.findById(code).isPresent()) {
+            Class _class = classRepository.findById(code).get();
+            classRepository.delete(_class);
+            return true;
+        } else {
             return false;
         }
-        classRepository.delete(_class);
-        return true;
     }
 
     /**
@@ -82,50 +85,67 @@ public class ClassService {
      * @param classDto An object that contain information about of a Class.
      * @return A ClassDto
      */
-    public ClassDto updateStudent(String code, ClassDto classDto)  {
-        Class _class = classRepository.findById(code).get();
-        _class.setTitle(classDto.getTitle());
-        _class.setDescription(classDto.getDescription());
-        Class classSaved = classRepository.save(_class);
+    public ClassDto updateClass(String code, ClassDto classDto)  {
+        if(classRepository.findById(code).isPresent()) {
+            Class _class = classRepository.findById(code).get();
+            _class.setTitle(classDto.getTitle());
+            _class.setDescription(classDto.getDescription());
 
-        if(classSaved != null) {
+            Class classSaved = classRepository.save(_class);
+
             return parserClass.parserEntityToDto(classSaved);
+        } else {
+            return null;
         }
-        return null;
     }
 
     /**
-     * Gets all Students by ClassId.
+     * Gets all Students by code of class.
      *
      * @param code An identifier of Class.
      * @return A list of Students.
      */
     public List<StudentDto> getStudentsByClassId(String code) {
         List<StudentDto> studentDtos = new ArrayList<>();
-        Class _class = classRepository.findById(code).get();
-        Iterable<Student> students =  _class.getStudents();
-        for (Student student: students) {
-            StudentDto studentDto = parserStudent.parserEntityToDto(student);
-            studentDtos.add(studentDto);
+        if(classRepository.findById(code).isPresent()) {
+            Class _class = classRepository.findById(code).get();
+            Iterable<Student> students =  _class.getStudents();
+            for (Student student: students) {
+                StudentDto studentDto = parserStudent.parserEntityToDto(student);
+                studentDtos.add(studentDto);
+            }
         }
+
         return studentDtos;
     }
 
     /**
-     * Search Class by code or title or description.
+     * Search Classes by code or title or description.
      *
-     * @param code An indentifier of class.
-     * @param title An title of class.
-     * @param description An breve description of class.
-     * @return An list of class.
+     * @param queryString An queryString of the request.
+     * @return An list of classDtos.
      */
-    public List<ClassDto> searchBy(String code, String title, String description) {
+    public List<ClassDto> searchBy(String queryString) {
         List<ClassDto> classDtos = new ArrayList<>();
-        List<Class> classes = classRepository.searchClasses(code, title, description);
-        for (Class _class: classes) {
-            ClassDto classDto = parserClass.parserEntityToDto(_class);
-            classDtos.add(classDto);
+        String code = null;
+        String title = null;
+        String description = null;
+
+        if(queryString != null) {
+            Map<String, List<String>> listParemeters = Convert.StringToMap(queryString);
+            code = listParemeters.get("code") != null ? listParemeters.get("code").get(0) : null;
+            title = listParemeters.get("title") != null ? listParemeters.get("title").get(0) : null;
+            description = listParemeters.get("description") != null ? listParemeters.get("description").get(0) : null;
         }
+
+        if(code != null || title != null || description != null) {
+            List<Class> classes = classRepository.searchClasses(code, title, description);
+            for (Class _class: classes) {
+                ClassDto classDto = parserClass.parserEntityToDto(_class);
+                classDtos.add(classDto);
+            }
+        }
+
         return classDtos;
     }
 }
